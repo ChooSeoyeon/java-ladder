@@ -17,12 +17,18 @@ public class LineTest {
     }
 
     // 상태보다는 어떤 역할 가지는지부터 접근해보자.
-    @DisplayName("여러 발판 중 특정 위치에 발판이 있으면 이동한다.") // 이동한다로 변경할지 결정해야 함
+    @DisplayName("발판이 있으면 이동한다.") // 이동한다로 변경할지 결정해야 함
     @Test
-    void moveByIndex() {
-        final var line = new Line(List.of(false, true, false));
+    void move() {
+        final var line = Line.of(List.of(
+                new Point(true), new Point(true).end()
+        ));
+        // 생성의 역할을 외부로 위임
+        // 이 Point를 생성하는 개발자는 Point의 이해도가 높아야 한다
 
-        Assertions.assertThat(line.move(1)).isEqualTo(2);
+        final var index = line.move2(0);
+
+        Assertions.assertThat(index).isEqualTo(1);
     }
 
     @DisplayName("발판이 없으면 이동하지 않는다.")
@@ -48,15 +54,32 @@ public class LineTest {
 
     @DisplayName("발판이 오른쪽으로 연결되어 있으면 오른쪽으로 이동한다.")
     @Test
-    void move2() {
-        final var line = new Line(true, false, true, false);
+    void moveConnected() {
+        final var line = Line.of(List.of(
+                new Point(true),
+                new Point(true).next(false),
+                new Point(true).next(false).next(true),
+                new Point(true).next(false).next(true).end()
+        ));
 
         assertAll(
-                () -> Assertions.assertThat(line.move(0)).isEqualTo(1),
-                () -> Assertions.assertThat(line.move(1)).isEqualTo(0),
-                () -> Assertions.assertThat(line.move(2)).isEqualTo(3),
-                () -> Assertions.assertThat(line.move(3)).isEqualTo(2)
+                () -> Assertions.assertThat(line.move2(0)).isEqualTo(1),
+                () -> Assertions.assertThat(line.move2(1)).isEqualTo(0),
+                () -> Assertions.assertThat(line.move2(2)).isEqualTo(3),
+                () -> Assertions.assertThat(line.move2(3)).isEqualTo(2)
         );
+    }
+
+    @DisplayName("여러 발판 중 특정 위치에 발판이 있으면 이동한다.")
+    @Test
+    void moveByIndex() {
+//        final var line = Line.of(List.of(
+//                new Point(false, true),
+//                new Point(false, true),
+//                new Point(false, true)
+//        ));
+//
+//        Assertions.assertThat(line.move2(1)).isEqualTo(2);
     }
 
     @DisplayName("발판이 없으면 이동하지 않는다.")

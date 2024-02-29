@@ -28,6 +28,10 @@ public class LadderGameTest {
         Assertions.assertThat(ladderGame.climb(3)).isEqualTo(1);
     }
 
+    // 원시값 포장해보기 <- 역할을 나눈다
+    // boolean 값으로 상태가 있는게 왠지 불안
+    // 마지막으로 false가 오지 않아도 구현되게 해보기
+    //
 
     class LadderGame {
         private final List<Line> lines;
